@@ -1,551 +1,1031 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Will AI Take My Job? - Funny & Easy Keynote</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    <title>Will AI Take My Job? 🤖</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        /* =========================================
-           CSS STYLES
-           ========================================= */
         :root {
-            --bg-dark: #07090F;
-            --bg-panel: rgba(20, 25, 40, 0.6);
-            --text-main: #E2E8F0;
-            --text-muted: #94A3B8;
-            --accent-blue: #00F0FF;
-            --accent-purple: #B026FF;
-            --accent-green: #00FF9D;
-            --accent-red: #FF3366;
-            --accent-gold: #FFD700;
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-            --blur: blur(12px);
-            --font-main: 'Poppins', sans-serif;
-            --font-code: 'Fira Code', monospace;
+            --bg: #080b14;
+            --panel: rgba(255,255,255,0.05);
+            --border: rgba(255,255,255,0.1);
+            --text: #e2e8f0;
+            --muted: #94a3b8;
+            --cyan: #00f0ff;
+            --purple: #b026ff;
+            --green: #00ff9d;
+            --red: #ff3366;
+            --gold: #ffd700;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            font-family: var(--font-main);
-            overflow: hidden; 
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            height: 100vh;
+            overflow: hidden;
             line-height: 1.6;
         }
 
-        /* Background Animations */
-        .bg-elements {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            z-index: -1; overflow: hidden;
-            background: radial-gradient(circle at center, #111524 0%, var(--bg-dark) 100%);
+        /* Background */
+        .bg {
+            position: fixed; inset: 0; z-index: -1;
+            background:
+                radial-gradient(ellipse at 15% 20%, rgba(176,38,255,0.18) 0%, transparent 55%),
+                radial-gradient(ellipse at 85% 80%, rgba(0,240,255,0.12) 0%, transparent 55%),
+                #080b14;
         }
 
-        .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.4; animation: float 20s infinite ease-in-out alternate; }
-        .orb-1 { width: 40vw; height: 40vw; background: var(--accent-purple); top: -10%; left: -10%; }
-        .orb-2 { width: 30vw; height: 30vw; background: var(--accent-blue); bottom: -10%; right: -10%; animation-delay: -5s; }
-        .orb-3 { width: 25vw; height: 25vw; background: #0033ff; top: 40%; left: 40%; animation-duration: 25s; }
-
-        .grid-overlay {
-            position: absolute; width: 100%; height: 100%;
-            background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-            background-size: 40px 40px; z-index: 0; opacity: 0.5;
+        /* Progress bar */
+        .progress { position: fixed; top: 0; left: 0; width: 100%; height: 4px; background: rgba(255,255,255,0.08); z-index: 100; }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--cyan), var(--purple), var(--gold));
+            transition: width 0.4s ease;
+            box-shadow: 0 0 10px var(--cyan);
         }
-
-        @keyframes float { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(50px, 50px) scale(1.1); } }
-
-        /* Presentation Container */
-        #presentation { position: relative; width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center; }
-
-        /* UI Elements */
-        .progress-bar { position: fixed; top: 0; left: 0; width: 100%; height: 4px; background: rgba(255,255,255,0.1); z-index: 100; }
-        .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple)); transition: width 0.3s ease; box-shadow: 0 0 10px var(--accent-blue); }
-        .slide-number { position: fixed; bottom: 20px; right: 30px; font-size: 0.9rem; color: var(--text-muted); font-weight: 600; z-index: 100; }
-        .controls { position: fixed; bottom: 20px; left: 30px; display: flex; gap: 10px; z-index: 100; }
 
         /* Slides */
-        .slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; padding: 5% 10%; opacity: 0; visibility: hidden; display: flex; flex-direction: column; justify-content: center; }
-        .slide.active { opacity: 1; visibility: visible; }
+        #slides { width: 100vw; height: 100vh; position: relative; }
 
-        /* Layout Utilities */
-        .content-center { text-align: center; margin: auto; }
-        .content-top { text-align: center; margin-bottom: 2rem; margin-top: -5vh; }
-        .content-split { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; width: 100%; }
-        .mt-1 { margin-top: 1rem; } .mt-2 { margin-top: 2rem; } .mt-3 { margin-top: 3rem; } .mt-4 { margin-top: 4rem; } .mb-2 { margin-bottom: 2rem; }
-        .p-0 { padding: 0 !important; } .p-2 { padding: 1rem 2rem; } .p-3 { padding: 2rem; }
-        .inline-block { display: inline-block; } .flex-center { display: flex; justify-content: center; align-items: center; flex-direction: column; }
+        .slide {
+            position: absolute; inset: 0;
+            padding: 56px 8vw 90px;
+            display: flex; flex-direction: column; justify-content: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.35s ease;
+        }
+        .slide.active { opacity: 1; pointer-events: all; }
+        .slide.center { align-items: center; text-align: center; }
 
         /* Typography */
-        .title-huge { font-size: 4rem; font-weight: 800; line-height: 1.1; letter-spacing: -1px; }
-        .title-large { font-size: 3rem; font-weight: 700; }
-        .subtitle { font-size: 1.6rem; font-weight: 300; color: var(--text-muted); }
-        .body-text { font-size: 1.3rem; color: var(--text-muted); }
-        .text-sm { font-size: 1rem; color: var(--text-muted); }
-        .text-xl { font-size: 1.5rem; }
+        h1 { font-size: clamp(2rem, 4.5vw, 3.8rem); font-weight: 900; line-height: 1.1; }
+        h2 { font-size: clamp(1.6rem, 3.2vw, 2.8rem); font-weight: 800; line-height: 1.15; }
+        h3 { font-size: 1.2rem; font-weight: 700; }
+        h4 { font-size: 1.05rem; font-weight: 600; }
+        p  { font-size: 1.05rem; line-height: 1.7; }
+        .sub { font-size: 1.2rem; color: var(--muted); margin-top: 0.7rem; }
+        .muted { color: var(--muted); }
+        .italic { font-style: italic; }
 
-        .accent-blue { color: var(--accent-blue); } .accent-purple { color: var(--accent-purple); }
-        .text-green { color: var(--accent-green); } .text-red { color: var(--accent-red); }
-        .text-gold { color: var(--accent-gold); } .text-gray { color: var(--text-muted); } .text-white { color: #fff; }
-        .glow-text { text-shadow: 0 0 20px rgba(255, 255, 255, 0.3); }
+        /* Color utilities */
+        .cyan   { color: var(--cyan);   }
+        .purple { color: var(--purple); }
+        .green  { color: var(--green);  }
+        .red    { color: var(--red);    }
+        .gold   { color: var(--gold);   }
+        .white  { color: #fff;          }
 
-        kbd { background: rgba(255, 255, 255, 0.1); border: 1px solid var(--glass-border); border-radius: 4px; padding: 0.1rem 0.4rem; font-family: var(--font-code); font-size: 0.8rem; }
+        .glow-cyan   { text-shadow: 0 0 35px rgba(0,240,255,0.55);   }
+        .glow-purple { text-shadow: 0 0 35px rgba(176,38,255,0.55);  }
+        .glow-gold   { text-shadow: 0 0 35px rgba(255,215,0,0.55);   }
 
-        /* Components */
-        .glass-panel, .glass-card { background: var(--bg-panel); backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur); border: 1px solid var(--glass-border); border-radius: 16px; box-shadow: var(--glass-shadow); }
-        .glass-card { padding: 1.5rem; transition: transform 0.3s ease, border-color 0.3s ease; }
-        .glass-card:hover { transform: translateY(-5px); border-color: rgba(255,255,255,0.3); }
-        .glass-btn { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border); color: var(--text-main); padding: 10px 20px; border-radius: 8px; cursor: pointer; backdrop-filter: var(--blur); font-family: var(--font-main); font-size: 1rem; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
-        .glass-btn:hover { background: rgba(255, 255, 255, 0.15); border-color: var(--accent-blue); }
-        .icon-btn { padding: 12px; border-radius: 50%; }
+        /* Cards */
+        .card {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.2rem 1.5rem;
+            backdrop-filter: blur(12px);
+            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+        }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 14px 42px rgba(0,0,0,0.45); }
+        .card.c-cyan   { border-color: rgba(0,240,255,0.45);  }
+        .card.c-purple { border-color: rgba(176,38,255,0.45); }
+        .card.c-green  { border-color: rgba(0,255,157,0.45);  }
+        .card.c-red    { border-color: rgba(255,51,102,0.45); }
+        .card.c-gold   { border-color: rgba(255,215,0,0.45);  }
 
-        .custom-list { list-style: none; }
-        .custom-list li { margin-bottom: 1rem; font-size: 1.3rem; display: flex; align-items: center; gap: 12px; }
-        .highlight-box { border-left: 4px solid var(--accent-blue); padding-left: 1rem; background: linear-gradient(90deg, rgba(0,240,255,0.1), transparent); font-weight: bold;}
+        /* Layouts */
+        .split  { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; width: 100%; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.4rem; }
 
-        /* Layouts & Gifs */
-        .meme-gif { max-height: 250px; border-radius: 12px; margin-top: 15px; border: 2px solid var(--glass-border); }
-        .meme-gif-large { max-height: 350px; border-radius: 12px; margin-top: 15px; border: 2px solid var(--glass-border); }
-        
-        .grid-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; max-width: 1000px; margin-inline: auto; }
-        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
-        .icon-large { font-size: 2.5rem; margin-bottom: 1rem; }
+        /* Spacing */
+        .mt1 { margin-top: 0.6rem;  }
+        .mt2 { margin-top: 1.2rem;  }
+        .mt3 { margin-top: 1.8rem;  }
+        .mt4 { margin-top: 2.4rem;  }
+        .mb1 { margin-bottom: 0.6rem; }
+        .mb2 { margin-bottom: 1.2rem; }
 
-        /* Timeline */
-        .timeline { display: flex; justify-content: space-between; align-items: center; position: relative; padding: 2rem 0; }
-        .timeline::before { content: ''; position: absolute; top: 50%; left: 0; width: 100%; height: 2px; background: linear-gradient(90deg, rgba(255,255,255,0.1) 80%, var(--accent-purple)); z-index: 0; }
-        .timeline-item { position: relative; z-index: 1; text-align: center; background: var(--bg-dark); padding: 1rem; border-radius: 12px; }
-        .icon-box { width: 60px; height: 60px; background: var(--bg-panel); border: 1px solid var(--glass-border); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 1rem; font-size: 1.5rem; }
-        .highlight-border .icon-box { border-color: var(--accent-purple); box-shadow: 0 0 20px rgba(176, 38, 255, 0.4); }
+        /* Lists */
+        .list { list-style: none; }
+        .list li { padding: 0.5rem 0; font-size: 1.05rem; display: flex; align-items: flex-start; gap: 10px; }
 
-        /* Code Window */
-        .code-window { font-family: var(--font-code); overflow: hidden; text-align: left; }
-        .code-header { background: rgba(0,0,0,0.5); padding: 10px 15px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--glass-border); }
-        .dot { width: 12px; height: 12px; border-radius: 50%; }
-        .dot.red { background: #ff5f56; } .dot.yellow { background: #ffbd2e; } .dot.green { background: #27c93f; }
-        .filename { margin-left: auto; color: var(--text-muted); font-size: 0.8rem; }
-        pre { padding: 15px; font-size: 1.1rem; overflow-x: auto; margin: 0;}
-        code { color: #e6e6e6; } .comment { color: #6a9955; }
+        /* GIFs */
+        .gif {
+            border-radius: 14px;
+            border: 2px solid rgba(255,255,255,0.12);
+            display: block;
+        }
+        .gif-sm  { max-height: 180px; border-radius: 12px; }
+        .gif-md  { max-height: 240px; }
+        .gif-lg  { max-height: 290px; }
+        .gif-center { margin: 0 auto; }
+        .gif-glow { box-shadow: 0 0 40px rgba(176,38,255,0.45), 0 0 80px rgba(0,240,255,0.15); }
+
+        /* Highlight box */
+        .hl { border-left: 3px solid var(--cyan);   padding: 12px 16px; background: rgba(0,240,255,0.06);   border-radius: 0 10px 10px 0; margin-top: 1rem; }
+        .hl.red    { border-color: var(--red);    background: rgba(255,51,102,0.06); }
+        .hl.green  { border-color: var(--green);  background: rgba(0,255,157,0.06); }
+        .hl.gold   { border-color: var(--gold);   background: rgba(255,215,0,0.06); }
+        .hl.purple { border-color: var(--purple); background: rgba(176,38,255,0.06); }
+
+        /* Timeline — redesigned with CSS arrows */
+        .tl-row { display: flex; align-items: center; justify-content: center; width: 100%; gap: 0; }
+        .tl-card {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1rem 1.1rem;
+            text-align: center;
+            flex: 1;
+            max-width: 190px;
+            position: relative;
+            backdrop-filter: blur(10px);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .tl-card:hover { transform: translateY(-4px); }
+        .tl-card.tl-now {
+            border-color: rgba(176,38,255,0.55);
+            box-shadow: 0 0 28px rgba(176,38,255,0.28);
+        }
+        .tl-era   { font-size: 0.72rem; color: var(--muted); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+        .tl-emoji { font-size: 2.2rem; margin-bottom: 8px; display: block; }
+        .tl-from  { font-weight: 700; font-size: 0.9rem; color: var(--text); }
+        .tl-sep   { color: var(--muted); font-size: 0.8rem; margin: 4px 0; }
+        .tl-to    { font-size: 0.85rem; color: var(--cyan); font-weight: 600; }
+        .tl-badge {
+            position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--purple), var(--cyan));
+            color: #fff; font-size: 0.68rem; font-weight: 800;
+            padding: 3px 10px; border-radius: 20px; white-space: nowrap;
+        }
+        /* CSS arrow connector between cards */
+        .tl-arrow {
+            display: flex; align-items: center; flex-shrink: 0; width: 44px;
+        }
+        .tl-arrow::before {
+            content: ''; flex: 1; height: 2px;
+            background: linear-gradient(90deg, var(--cyan), var(--purple));
+        }
+        .tl-arrow::after {
+            content: ''; width: 0; height: 0;
+            border-top: 6px solid transparent;
+            border-bottom: 6px solid transparent;
+            border-left: 10px solid var(--purple);
+        }
+
+        /* Code block */
+        .code-win { border-radius: 12px; overflow: hidden; font-family: 'Fira Code', 'Courier New', monospace; }
+        .code-bar { background: rgba(0,0,0,0.55); padding: 8px 14px; display: flex; align-items: center; gap: 6px; }
+        .dot-mac { width: 10px; height: 10px; border-radius: 50%; }
+        .dot-mac.r { background: #ff5f56; } .dot-mac.y { background: #ffbd2e; } .dot-mac.g { background: #27c93f; }
+        .code-name { margin-left: auto; font-size: 0.75rem; color: var(--muted); }
+        pre { background: rgba(0,0,0,0.38); padding: 14px; font-size: 0.88rem; overflow-x: auto; margin: 0; border-top: 1px solid rgba(255,255,255,0.08); color: #e6e6e6; }
+        .cm { color: #6a9955; }
+
+        /* ── Interactive: Poll buttons ── */
+        .poll-group { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 1.2rem; }
+        .poll-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 13px 26px; border-radius: 50px;
+            border: 2px solid rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.04);
+            color: white; font-size: 1.05rem; font-weight: 600;
+            cursor: pointer; transition: all 0.25s; font-family: inherit;
+        }
+        .poll-btn:hover { transform: scale(1.07); }
+        .poll-btn.cyan   { border-color: var(--cyan);   color: var(--cyan);   }
+        .poll-btn.cyan:hover   { background: rgba(0,240,255,0.12);  box-shadow: 0 0 20px rgba(0,240,255,0.3);  }
+        .poll-btn.purple { border-color: var(--purple); color: var(--purple); }
+        .poll-btn.purple:hover { background: rgba(176,38,255,0.12); box-shadow: 0 0 20px rgba(176,38,255,0.3); }
+        .poll-btn.green  { border-color: var(--green);  color: var(--green);  }
+        .poll-btn.green:hover  { background: rgba(0,255,157,0.12);  box-shadow: 0 0 20px rgba(0,255,157,0.3);  }
+        .poll-btn.red    { border-color: var(--red);    color: var(--red);    }
+        .poll-btn.red:hover    { background: rgba(255,51,102,0.12);  box-shadow: 0 0 20px rgba(255,51,102,0.3); }
+        .poll-btn.gold   { border-color: var(--gold);   color: var(--gold);   }
+        .poll-btn.gold:hover   { background: rgba(255,215,0,0.12);   box-shadow: 0 0 20px rgba(255,215,0,0.3);  }
+        .poll-answer { font-size: 1.15rem; font-weight: 700; margin-top: 0.8rem; min-height: 2rem; }
+
+        /* ── Interactive: Quiz ── */
+        .quiz-wrap { width: 100%; max-width: 620px; margin: 1.5rem auto 0; text-align: left; }
+        .quiz-opt {
+            display: block; width: 100%; text-align: left;
+            padding: 13px 20px; border-radius: 12px; margin-bottom: 10px;
+            border: 1.5px solid rgba(255,255,255,0.12);
+            background: rgba(255,255,255,0.04);
+            color: white; font-size: 1rem; font-family: inherit;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .quiz-opt:hover:not(:disabled) { border-color: rgba(0,240,255,0.45); background: rgba(0,240,255,0.08); }
+        .quiz-opt.correct { border-color: var(--green); background: rgba(0,255,157,0.12); color: var(--green); font-weight: 700; }
+        .quiz-opt.wrong   { border-color: var(--red);   background: rgba(255,51,102,0.12); color: var(--red); }
+        .quiz-opt:disabled { cursor: not-allowed; }
+        .quiz-feedback { display: none; font-size: 1.1rem; font-weight: 700; margin-top: 14px; padding: 12px 16px; border-radius: 10px; }
+        .quiz-feedback.show { display: block; }
+        .quiz-feedback.good { background: rgba(0,255,157,0.1); color: var(--green); border: 1px solid rgba(0,255,157,0.3); }
+        .quiz-feedback.bad  { background: rgba(255,51,102,0.1); color: var(--red);   border: 1px solid rgba(255,51,102,0.3); }
+
+        /* ── Interactive: Skill cards ── */
+        .skill-card { cursor: pointer; text-align: center; user-select: none; }
+        .skill-card .detail { display: none; margin-top: 8px; font-size: 0.88rem; color: var(--muted); line-height: 1.5; }
+        .skill-card.open .detail { display: block; }
+        .skill-card.open { border-color: rgba(0,240,255,0.5); box-shadow: 0 0 22px rgba(0,240,255,0.15); }
+        .skill-card .hint { font-size: 0.75rem; color: var(--muted); margin-top: 6px; opacity: 0.7; }
+        .skill-card.open .hint { display: none; }
+
+        /* ── Interactive: Engineer flip ── */
+        .eng-card { cursor: pointer; user-select: none; }
+        .eng-card .hidden-info { display: none; }
+        .eng-card.flipped { transform: translateY(-6px) !important; }
+        .eng-card.flipped .hidden-info { display: block; }
+        .eng-card .reveal-hint { font-size: 0.8rem; color: var(--muted); margin-top: 8px; }
+        .eng-card.flipped .reveal-hint { display: none; }
+
+        /* ── Interactive: Commit button ── */
+        .commit-btn {
+            display: inline-flex; align-items: center; gap: 12px;
+            padding: 18px 44px; border-radius: 60px; border: none;
+            background: linear-gradient(135deg, var(--purple), var(--cyan));
+            color: white; font-size: 1.25rem; font-weight: 800;
+            cursor: pointer; transition: all 0.25s; font-family: inherit;
+            box-shadow: 0 0 32px rgba(176,38,255,0.4);
+            margin-top: 1.4rem;
+        }
+        .commit-btn:hover { transform: scale(1.07); box-shadow: 0 0 50px rgba(176,38,255,0.6); }
+        .commit-btn:active { transform: scale(0.96); }
+        .commit-btn.done { background: linear-gradient(135deg, var(--green), #00c9ff); box-shadow: 0 0 32px rgba(0,255,157,0.4); }
+
+        /* ── Navigation ── */
+        .nav {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            display: flex; align-items: center; gap: 10px; z-index: 100;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 50px; padding: 6px 14px;
+            backdrop-filter: blur(14px);
+        }
+        .nav-btn {
+            width: 34px; height: 34px; border-radius: 50%;
+            background: transparent; border: 1px solid rgba(255,255,255,0.15);
+            color: white; cursor: pointer; font-size: 1rem;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s; font-family: inherit;
+        }
+        .nav-btn:hover { background: rgba(0,240,255,0.15); border-color: var(--cyan); }
+        .nav-btn:disabled { opacity: 0.3; pointer-events: none; }
+        .slide-ctr { color: var(--muted); font-size: 0.82rem; min-width: 52px; text-align: center; }
+
+        /* Dots */
+        .dots { position: fixed; bottom: 70px; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; z-index: 100; }
+        .dot { width: 6px; height: 6px; border-radius: 3px; background: rgba(255,255,255,0.2); cursor: pointer; transition: all 0.3s; }
+        .dot.active { background: var(--cyan); width: 20px; box-shadow: 0 0 8px var(--cyan); }
+
+        /* Keyboard hint */
+        .kb { position: fixed; bottom: 26px; right: 22px; font-size: 0.75rem; color: var(--muted); }
+        kbd { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; padding: 2px 6px; font-family: monospace; font-size: 0.72rem; }
+
+        /* Floating decorations */
+        .deco { position: absolute; font-size: 2rem; opacity: 0.1; animation: floatDeco 7s ease-in-out infinite; pointer-events: none; user-select: none; }
+        @keyframes floatDeco { 0%,100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-18px) rotate(9deg); } }
+
+        /* Confetti canvas */
+        #confetti { position: fixed; inset: 0; z-index: 999; pointer-events: none; opacity: 0; transition: opacity 0.3s; }
 
         /* Misc */
-        .border-red { border-color: rgba(255, 51, 102, 0.4); } .border-green { border-color: rgba(0, 255, 157, 0.4); }
-        .border-gold { border-color: rgba(255, 215, 0, 0.5); } .border-blue { border-color: rgba(0, 240, 255, 0.4); }
-        .animate-item { opacity: 0; transform: translateY(30px); }
-
+        .flex-center { display: flex; justify-content: center; align-items: center; }
+        .text-center { text-align: center; }
+        .w100 { width: 100%; }
+        .mx-auto { margin-inline: auto; }
     </style>
 </head>
 <body>
 
-    <div class="bg-elements">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
-        <div class="grid-overlay"></div>
+<div class="bg"></div>
+<canvas id="confetti"></canvas>
+<div class="progress"><div class="progress-fill" id="prog"></div></div>
+
+<div id="slides">
+
+<!-- ════════════════════ SLIDE 0 — TITLE ════════════════════ -->
+<section class="slide center active" id="s0">
+    <span class="deco" style="top:10%;left:5%;animation-delay:0s">🤖</span>
+    <span class="deco" style="top:14%;right:6%;animation-delay:1.2s">😱</span>
+    <span class="deco" style="bottom:20%;left:4%;animation-delay:2s">💀</span>
+    <span class="deco" style="bottom:18%;right:7%;animation-delay:0.8s">🔥</span>
+
+    <h1 class="glow-purple">Will AI Take My Job? <span class="purple">🤖</span></h1>
+    <p class="sub">How to work <em>with</em> AI, stay valuable, and keep your paycheck.</p>
+
+    <img src="https://media.giphy.com/media/g01ZnwAUvutuK8GIQn/giphy.gif"
+         alt="Confused Travolta" class="gif gif-md gif-center gif-glow mt3"
+         onerror="this.style.display='none'">
+
+    <div class="mt3">
+        <p class="muted" style="font-size:1rem;margin-bottom:1rem">Quick poll before we start — are you scared of AI? 👇</p>
+        <div class="poll-group">
+            <button class="poll-btn cyan"   onclick="vote('s0poll', '😱 Same bro. That\'s why we\'re here. Let\'s fix that!')">😱 Very scared</button>
+            <button class="poll-btn purple" onclick="vote('s0poll', '😅 Relatable. After this you\'ll feel way better!')">😅 A little bit</button>
+            <button class="poll-btn green"  onclick="vote('s0poll', '😎 Confidence! Let\'s make sure that\'s well-earned 😂')">😎 Not at all</button>
+        </div>
+        <div id="s0poll-out" class="poll-answer"></div>
     </div>
 
-    <div id="presentation">
-        
-        <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
-        <div class="slide-number" id="slide-counter">1 / 15</div>
+    <p class="muted mt3" style="font-size:0.9rem">Press <kbd>Space</kbd> or <kbd>→</kbd> to start</p>
+</section>
 
-        <section class="slide active" id="slide-0">
-            <div class="content-center text-center flex-center">
-                <div class="animate-item">
-                    <h1 class="title-huge glow-text">Will AI Take My Job?</h1>
-                </div>
-                <h2 class="subtitle accent-blue animate-item mt-1">How to work with AI, stay important, and keep your salary.</h2>
-                <img src="https://media.giphy.com/media/g01ZnwAUvutuK8GIQn/giphy.gif" alt="Confused Travolta" class="meme-gif-large animate-item delay-1">
-                <div class="glass-panel mt-3 animate-item delay-2 inline-block p-2">
-                    <p class="text-sm"><i class="fa-solid fa-keyboard"></i> Press <kbd>Space</kbd> or <kbd>→</kbd> to begin</p>
-                </div>
+<!-- ════════════════════ SLIDE 1 — THE FEAR ════════════════════ -->
+<section class="slide" id="s1">
+    <div class="split">
+        <div>
+            <h2>The Fear Is <span class="purple">Real</span> 😰</h2>
+            <p class="sub mt2">Let's be honest. AI can now:</p>
+            <ul class="list mt2">
+                <li>✅ Write 500 lines of code in 10 seconds</li>
+                <li>✅ Fix bugs <em>(sometimes 🤷‍♂️)</em></li>
+                <li>✅ Write emails better than you</li>
+                <li>✅ Pass coding interviews (awkward...)</li>
+                <li>✅ Talk like a (weird) human 24/7</li>
+            </ul>
+            <div class="hl mt2">
+                <strong>It is completely normal to feel scared.</strong> But the full picture is very different from what you think.
             </div>
-        </section>
+        </div>
+        <div class="text-center">
+            <img src="https://media.giphy.com/media/LRVnPYqM8DLag/giphy.gif"
+                 alt="Sweating guy" class="gif gif-lg w100"
+                 onerror="this.style.display='none'">
+            <p class="muted mt2 italic">"Me watching ChatGPT write my code..." 😅</p>
+        </div>
+    </div>
+</section>
 
-        <section class="slide" id="slide-1">
-            <div class="content-split">
-                <div class="left-col animate-item">
-                    <h2 class="title-large">The Fear Is <span class="accent-purple">Real</span></h2>
-                    <p class="body-text mt-2">Let's be honest. AI can now:</p>
-                    <ul class="custom-list mt-2">
-                        <li><i class="fa-solid fa-check text-green"></i> Write 500 lines of code in 10 seconds</li>
-                        <li><i class="fa-solid fa-check text-green"></i> Fix bugs (sometimes)</li>
-                        <li><i class="fa-solid fa-check text-green"></i> Talk like a human</li>
-                    </ul>
-                    <p class="body-text mt-2 highlight-box">It is normal to feel scared. But the real story is very different.</p>
-                </div>
-                <div class="right-col center-content animate-item delay-1">
-                    <div class="glass-card">
-                        <img src="https://media.giphy.com/media/LRVnPYqM8DLag/giphy.gif" alt="Sweating" class="meme-gif" style="width:100%; max-height:300px;">
-                        <p class="text-center mt-2 font-bold">"Me watching ChatGPT write my whole task..."</p>
-                    </div>
-                </div>
-            </div>
-        </section>
+<!-- ════════════════════ SLIDE 2 — HISTORY ════════════════════ -->
+<section class="slide" id="s2">
+    <div class="text-center mb2">
+        <h2>Technology <span class="cyan">Always</span> Changes</h2>
+        <p class="sub">And developers always adapt. Every. Single. Time. 💪</p>
+    </div>
 
-        <section class="slide" id="slide-2">
-            <div class="content-top animate-item">
-                <h2 class="title-large text-center">Technology <span class="accent-blue">Always</span> Changes</h2>
-                <p class="subtitle text-center mt-1">Our jobs change, but we don't disappear.</p>
-            </div>
-            <div class="timeline mt-4">
-                <div class="timeline-item animate-item delay-1">
-                    <div class="icon-box"><i class="fa-solid fa-microchip"></i></div>
-                    <h3>Old Assembly</h3>
-                    <p>to Java / C#</p>
-                </div>
-                <div class="timeline-item animate-item delay-2">
-                    <div class="icon-box"><i class="fa-solid fa-server"></i></div>
-                    <h3>Local Servers</h3>
-                    <p>to Cloud (AWS)</p>
-                </div>
-                <div class="timeline-item animate-item delay-3">
-                    <div class="icon-box"><i class="fa-brands fa-js"></i></div>
-                    <h3>Vanilla JS</h3>
-                    <p>to React / Angular</p>
-                </div>
-                <div class="timeline-item animate-item delay-4 highlight-border">
-                    <div class="icon-box pulse"><i class="fa-solid fa-robot text-purple"></i></div>
-                    <h3 class="text-purple">Typing Code</h3>
-                    <p>to AI Teamwork</p>
-                </div>
-            </div>
-        </section>
+    <!-- Timeline with CSS arrow connectors -->
+    <div class="tl-row mt3">
 
-        <section class="slide" id="slide-3">
-            <div class="content-top animate-item">
-                <h2 class="title-large text-center">What AI is <span class="text-green">Very Good</span> At</h2>
-            </div>
-            <div class="content-split">
-                <div class="left-col animate-item delay-1">
-                    <ul class="custom-list">
-                        <li><i class="fa-solid fa-bolt text-green"></i> <strong>Boring Code:</strong> Making components fast.</li>
-                        <li><i class="fa-solid fa-repeat text-green"></i> <strong>Repeating Tasks:</strong> Doing the things you hate.</li>
-                        <li><i class="fa-solid fa-book text-green"></i> <strong>Explaining:</strong> Reading old, messy code.</li>
-                    </ul>
-                </div>
-                <div class="right-col center-content animate-item delay-2">
-                    <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" alt="Typing Cat" class="meme-gif-large">
-                    <p class="text-center mt-2 text-xl">AI is just a very fast, very blind cat.</p>
-                </div>
-            </div>
-        </section>
+        <div class="tl-card">
+            <div class="tl-era">1990s</div>
+            <span class="tl-emoji">💾</span>
+            <div class="tl-from">Assembly / C</div>
+            <div class="tl-sep">↓</div>
+            <div class="tl-to">Java / C#</div>
+        </div>
 
-        <section class="slide" id="slide-4">
-            <div class="content-top animate-item">
-                <h2 class="title-large text-center">What AI is <span class="text-red">Very Bad</span> At</h2>
-            </div>
-            <div class="content-split">
-                <div class="left-col center-content animate-item delay-1">
-                    <img src="https://media.giphy.com/media/QMHoU66sBXqqLqYvGO/giphy.gif" alt="This is fine" class="meme-gif-large">
-                    <p class="text-center mt-2 text-xl">AI when production goes down.</p>
-                </div>
-                <div class="right-col animate-item delay-2">
-                    <ul class="custom-list">
-                        <li><i class="fa-solid fa-xmark text-red"></i> <strong>Business Logic:</strong> AI doesn't know what your client actually wants.</li>
-                        <li><i class="fa-solid fa-xmark text-red"></i> <strong>Big Picture:</strong> It breaks the database while fixing the button.</li>
-                        <li><i class="fa-solid fa-xmark text-red"></i> <strong>Taking the Blame:</strong> AI cannot go to jail for a data leak. You do.</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
+        <div class="tl-arrow"></div>
 
-        <section class="slide" id="slide-5">
-            <div class="content-center text-center flex-center">
-                <h2 class="title-large animate-item">How to keep your job and stay <span class="glow-text text-gold">Important</span></h2>
-                <p class="subtitle mt-1 animate-item delay-1">Stop worrying about how fast you type. Focus on these:</p>
-                
-                <div class="grid-3 mt-4" style="max-width: 800px;">
-                    <div class="glass-card animate-item delay-2 text-center"><h3>Problem Solving</h3></div>
-                    <div class="glass-card animate-item delay-3 text-center"><h3>Architecture</h3></div>
-                    <div class="glass-card animate-item delay-4 text-center"><h3>Clean Code</h3></div>
-                    <div class="glass-card animate-item delay-5 text-center"><h3>Decision Making</h3></div>
-                    <div class="glass-card animate-item delay-6 text-center"><h3>Reviewing Code</h3></div>
-                    <div class="glass-card animate-item delay-7 border-gold text-center"><h3 class="text-gold">Using AI Smartly</h3></div>
-                </div>
-            </div>
-        </section>
+        <div class="tl-card">
+            <div class="tl-era">2000s</div>
+            <span class="tl-emoji">🖥️</span>
+            <div class="tl-from">Local Servers</div>
+            <div class="tl-sep">↓</div>
+            <div class="tl-to">Cloud / AWS</div>
+        </div>
 
-        <section class="slide" id="slide-6">
-            <div class="content-top animate-item">
-                <h2 class="title-large text-center">Making <span class="accent-purple">Smart Choices</span></h2>
-            </div>
-            <div class="content-split">
-                <div class="left-col animate-item delay-1">
-                    <p class="text-xl">AI will always suggest the most complex, crazy architecture.</p>
-                    <div class="glass-panel mt-2 p-2 border-red">
-                        <p><strong>🤖 AI Says:</strong><br>"You should use 15 Microservices, Kafka, and Kubernetes!"</p>
-                    </div>
-                    <div class="glass-panel mt-2 p-2 border-green">
-                        <p><strong>😎 You Say:</strong><br>"Bro, we only have 2 users. We are using a simple database."</p>
-                    </div>
-                </div>
-                <div class="right-col center-content animate-item delay-2">
-                    <img src="https://media.giphy.com/media/d3mlE7uhX8KFgEmY/giphy.gif" alt="Smart guy" class="meme-gif-large">
-                </div>
-            </div>
-        </section>
+        <div class="tl-arrow"></div>
 
-        <section class="slide" id="slide-7">
-            <div class="content-split">
-                <div class="left-col animate-item">
-                    <h2 class="title-large">Clean Code is <span class="accent-blue">More Important Now</span></h2>
-                    <p class="body-text mt-2">AI writes code that "works", but it is usually very messy and hard to read.</p>
-                    <ul class="custom-list mt-2">
-                        <li><i class="fa-solid fa-broom text-blue"></i> You must clean the AI code.</li>
-                        <li><i class="fa-solid fa-eye text-blue"></i> Your team needs to read it easily.</li>
-                    </ul>
-                </div>
-                <div class="right-col animate-item delay-1">
-                    <div class="code-window glass-card p-0">
-                        <div class="code-header"><span class="filename">AI_Spaghetti_Code.js</span></div>
-                        <pre><code><span class="comment">// It works, but my eyes hurt</span>
-function do(d){ let x=d.map(i=>i*2); fetch('/a',{body:x}).then(r=>console.log(r)); }</code></pre>
-                        <div class="code-header mt-1"><span class="filename">Your_Clean_Code.js</span></div>
-                        <pre><code><span class="comment">// Ah, beautiful and clear.</span>
-async function saveUserPoints(points) {
-  const doubledPoints = doubleValues(points);
-  await api.save(doubledPoints);
-}</code></pre>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <div class="tl-card">
+            <div class="tl-era">2010s</div>
+            <span class="tl-emoji">⚛️</span>
+            <div class="tl-from">Vanilla JS</div>
+            <div class="tl-sep">↓</div>
+            <div class="tl-to">React / Next.js</div>
+        </div>
 
-        <section class="slide" id="slide-8">
-            <div class="content-center text-center flex-center">
-                <h2 class="title-large animate-item">Code Review: <span class="text-red">Don't Trust AI!</span></h2>
-                <p class="subtitle mt-1 animate-item delay-1">You are the security guard now. Never copy-paste blindly!</p>
-                
-                <div class="glass-card mt-3 animate-item delay-2 border-red p-3">
-                    <h3>When you accept AI code without reading it, and production crashes:</h3>
-                    <img src="https://media.giphy.com/media/jUwpNzg9IcyrK/giphy.gif" alt="Homer Bushes" class="meme-gif">
-                    <h3 class="mt-2 text-red font-bold">Copy-Paste = New Technical Debt</h3>
-                </div>
-            </div>
-        </section>
+        <div class="tl-arrow"></div>
 
-        <section class="slide" id="slide-9">
-            <div class="content-top animate-item">
-                <h2 class="title-large text-center">AI Won’t Replace You.<br><span class="accent-gold glow-text">A Person Using AI Will.</span></h2>
-            </div>
-            <div class="content-split mt-2">
-                <div class="glass-card animate-item delay-1 border-gray text-center">
-                    <h3 class="text-gray border-b pb-1"><i class="fa-solid fa-user-xmark"></i> Engineer 1</h3>
-                    <ul class="custom-list mt-2 text-sm text-left">
-                        <li>Hates AI completely.</li>
-                        <li>Types everything by hand.</li>
-                        <li>Works late fixing small syntax errors.</li>
-                        <li><strong class="text-red">Always Stressed.</strong></li>
-                    </ul>
-                </div>
-                <div class="glass-card animate-item delay-2 border-gold text-center glow-box">
-                    <h3 class="text-gold border-b pb-1"><i class="fa-solid fa-user-astronaut"></i> Engineer 2</h3>
-                    <ul class="custom-list mt-2 text-sm text-left">
-                        <li>Uses AI for boring tasks.</li>
-                        <li>Focuses on system design.</li>
-                        <li>Reviews code carefully.</li>
-                        <li><strong class="text-green">Goes home at 5:00 PM.</strong></li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <section class="slide" id="slide-10">
-            <div class="content-top animate-item">
-                <h2 class="title-large text-center">The <span class="accent-blue">Smart Way</span> to Work</h2>
-                <p class="subtitle text-center mt-1">4 simple steps to use AI safely.</p>
-            </div>
-            <div class="flex-center mt-4">
-                <div style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: center;">
-                    <div class="glass-card animate-item delay-1 text-center" style="width: 200px;">
-                        <i class="fa-solid fa-comment-dots text-blue icon-large"></i>
-                        <h4>1. Ask clearly</h4>
-                    </div>
-                    <div class="glass-card animate-item delay-2 text-center" style="width: 200px;">
-                        <i class="fa-solid fa-glasses text-purple icon-large"></i>
-                        <h4>2. Read & Check</h4>
-                    </div>
-                    <div class="glass-card animate-item delay-3 text-center" style="width: 200px;">
-                        <i class="fa-solid fa-bug text-red icon-large"></i>
-                        <h4>3. Test it</h4>
-                    </div>
-                    <div class="glass-card animate-item delay-4 text-center" style="width: 200px;">
-                        <i class="fa-solid fa-broom text-green icon-large"></i>
-                        <h4>4. Clean it up</h4>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="slide" id="slide-11">
-            <div class="content-top animate-item">
-                <h2 class="title-large text-center">AI is for the <span class="accent-purple">Whole Team</span></h2>
-            </div>
-            <div class="grid-3 mt-2">
-                <div class="glass-card animate-item delay-1 text-center">
-                    <i class="fa-solid fa-vial-circle-check icon-large text-purple"></i>
-                    <h3>QA Testers</h3>
-                    <p class="text-sm mt-1">AI can write test cases and find missing edge cases fast.</p>
-                </div>
-                <div class="glass-card animate-item delay-2 text-center">
-                    <i class="fa-solid fa-list-check icon-large text-purple"></i>
-                    <h3>Project Managers</h3>
-                    <p class="text-sm mt-1">AI can summarize long, boring meetings into simple tasks.</p>
-                </div>
-                <div class="glass-card animate-item delay-3 text-center">
-                    <i class="fa-solid fa-users-gear icon-large text-purple"></i>
-                    <h3>Scrum Masters</h3>
-                    <p class="text-sm mt-1">AI can help write better Sprint tickets.</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="slide" id="slide-12">
-            <div class="content-center text-center flex-center">
-                <h2 class="title-large animate-item">Your Value Goes <span class="text-green glow-text">UP!</span></h2>
-                <div class="mt-4 animate-item delay-1" style="display: flex; flex-direction: column; gap: 10px; width: 600px;">
-                    <div class="glass-card border-green p-2">
-                        <strong>Designing & Making Big Choices</strong> <br><span class="text-green text-sm">(You do this!)</span>
-                    </div>
-                    <div class="glass-card border-blue p-2">
-                        <strong>Reviewing & Testing Code</strong> <br><span class="accent-blue text-sm">(You manage this!)</span>
-                    </div>
-                    <div class="glass-card border-gray p-2 text-gray">
-                        <strong>Typing boring syntax</strong> <br><span class="text-sm">(AI does this!)</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="slide" id="slide-13">
-            <div class="content-center text-center flex-center">
-                <div class="animate-item">
-                    <i class="fa-solid fa-quote-left text-gold icon-large"></i>
-                    <h1 class="title-huge glow-text mt-2 mb-2">Don't compete with AI at typing.<br>Compete at <span class="accent-blue">thinking</span>.</h1>
-                    <i class="fa-solid fa-quote-right text-gold icon-large"></i>
-                </div>
-                <p class="subtitle mt-3 animate-item delay-1">AI writes code. <strong class="text-white">Engineers build trust.</strong></p>
-            </div>
-        </section>
-
-        <section class="slide" id="slide-14">
-            <div class="content-center text-center flex-center">
-                <h1 class="title-huge accent-purple animate-item">Thank You!</h1>
-                <h2 class="subtitle mt-2 animate-item delay-1">Any Questions?</h2>
-                <img src="https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif" alt="Monkey Computer" class="meme-gif animate-item delay-2">
-                <p class="text-sm mt-4 text-gray animate-item delay-3">Press <kbd>Esc</kbd> to restart.</p>
-            </div>
-        </section>
-
-        <div class="controls">
-            <button id="prev-btn" class="glass-btn icon-btn"><i class="fa-solid fa-chevron-left"></i></button>
-            <button id="next-btn" class="glass-btn icon-btn"><i class="fa-solid fa-chevron-right"></i></button>
+        <div class="tl-card tl-now">
+            <div class="tl-badge">📍 YOU ARE HERE</div>
+            <div class="tl-era">2020s</div>
+            <span class="tl-emoji">🤖</span>
+            <div class="tl-from">Typing Code</div>
+            <div class="tl-sep">↓</div>
+            <div class="tl-to purple">AI Teamwork</div>
         </div>
 
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const slides = document.querySelectorAll('.slide');
-            const prevBtn = document.getElementById('prev-btn');
-            const nextBtn = document.getElementById('next-btn');
-            const progressBar = document.getElementById('progress');
-            const slideCounter = document.getElementById('slide-counter');
-            
-            let currentSlide = 0;
-            let isAnimating = false;
+    <div class="mt3" style="display:flex;align-items:center;justify-content:center;gap:1.5rem;flex-wrap:wrap">
+        <img src="https://media.giphy.com/media/l3q2K5jinAlChoCLS/giphy.gif"
+             alt="Confused developer"
+             class="gif gif-sm"
+             onerror="this.src='https://media.giphy.com/media/26tPplGWjN0xLybiU/giphy.gif'">
+        <p class="muted italic">Every dev when a new technology drops 😂</p>
+    </div>
+</section>
 
-            function init() {
-                updateUI();
-                animateSlideIn(slides[currentSlide]);
-            }
+<!-- ════════════════════ SLIDE 3 — AI GOOD AT ════════════════════ -->
+<section class="slide" id="s3">
+    <div class="split">
+        <div>
+            <h2>What AI is <span class="green">Really Good</span> At</h2>
+            <ul class="list mt3">
+                <li>⚡ <strong>Boilerplate Code:</strong> Writing components fast.</li>
+                <li>🔄 <strong>Repetitive Tasks:</strong> The work you hate doing.</li>
+                <li>📖 <strong>Explaining:</strong> Reading old, messy legacy code.</li>
+                <li>🧪 <strong>Unit Tests:</strong> Writing test cases in seconds.</li>
+                <li>📝 <strong>Documentation:</strong> Writing the comments you always skip.</li>
+            </ul>
+            <div class="hl mt2">
+                AI is like a very fast, very blind intern. <strong>Useful. Needs supervision.</strong>
+            </div>
+        </div>
+        <div class="text-center">
+            <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif"
+                 alt="Typing Cat" class="gif gif-lg"
+                 onerror="this.style.display='none'">
+            <p class="muted mt2 italic">AI typing your boilerplate at 300 WPM 🐱</p>
+        </div>
+    </div>
+</section>
 
-            function goToSlide(index, direction = 'next') {
-                if (isAnimating || index < 0 || index >= slides.length || index === currentSlide) return;
-                isAnimating = true;
+<!-- ════════════════════ SLIDE 4 — AI BAD AT ════════════════════ -->
+<section class="slide" id="s4">
+    <div class="split">
+        <div class="text-center">
+            <img src="https://media.giphy.com/media/QMHoU66sBXqqLqYvGO/giphy.gif"
+                 alt="This is fine dog" class="gif gif-lg"
+                 onerror="this.style.display='none'">
+            <p class="muted mt2 italic">AI when production goes down 🔥</p>
+        </div>
+        <div>
+            <h2>What AI is <span class="red">Terrible</span> At</h2>
+            <ul class="list mt3">
+                <li>❌ <strong>Business Logic:</strong> It doesn't know your client or their needs.</li>
+                <li>❌ <strong>Big Picture:</strong> Fixes a button, accidentally breaks the DB.</li>
+                <li>❌ <strong>Accountability:</strong> AI can't go to jail. You can. 👮</li>
+                <li>❌ <strong>Context:</strong> Hallucinates APIs that don't exist.</li>
+                <li>❌ <strong>Judgment:</strong> It thinks every app needs Kubernetes. 😭</li>
+            </ul>
+        </div>
+    </div>
+</section>
 
-                const outgoingSlide = slides[currentSlide];
-                const incomingSlide = slides[index];
+<!-- ════════════════════ SLIDE 5 — QUIZ ════════════════════ -->
+<section class="slide center" id="s5">
+    <h2>🧠 Pop Quiz! Let's See What You've Got</h2>
+    <p class="sub">AI suggests using 15 microservices, Kafka, and Kubernetes for an app with 2 users. You say:</p>
 
-                gsap.to(outgoingSlide, {
-                    opacity: 0, y: direction === 'next' ? -50 : 50, duration: 0.5, ease: 'power2.inOut',
-                    onComplete: () => {
-                        outgoingSlide.classList.remove('active');
-                        gsap.set(outgoingSlide, { y: 0 });
-                        
-                        incomingSlide.classList.add('active');
-                        gsap.set(incomingSlide, { opacity: 0, y: direction === 'next' ? 50 : -50 });
-                        
-                        gsap.to(incomingSlide, {
-                            opacity: 1, y: 0, duration: 0.5, ease: 'power2.out',
-                            onComplete: () => {
-                                currentSlide = index;
-                                updateUI();
-                                animateSlideIn(incomingSlide);
-                                isAnimating = false;
-                            }
-                        });
-                    }
-                });
-            }
+    <div class="quiz-wrap">
+        <button class="quiz-opt" onclick="quiz(this,false)">🤩 A) "Sure! AI knows best. Let's add Redis too while we're at it!"</button>
+        <button class="quiz-opt" onclick="quiz(this,true)">😎 B) "Bro, we have 2 users. We're using one simple database."</button>
+        <button class="quiz-opt" onclick="quiz(this,false)">😬 C) "What's a microservice?"</button>
+        <button class="quiz-opt" onclick="quiz(this,false)">🙏 D) "Let me ask AI again and hope it gives a different answer..."</button>
+        <div class="quiz-feedback" id="quiz-fb"></div>
+    </div>
+</section>
 
-            function animateSlideIn(slide) {
-                const items = slide.querySelectorAll('.animate-item');
-                gsap.set(items, { opacity: 0, y: 30 });
-                
-                items.forEach((item, i) => {
-                    let delayMod = 0;
-                    const classes = Array.from(item.classList);
-                    const delayClass = classes.find(c => c.startsWith('delay-'));
-                    if (delayClass) delayMod = parseInt(delayClass.split('-')[1]) * 0.15;
-                    else delayMod = i * 0.1;
+<!-- ════════════════════ SLIDE 6 — STAY VALUABLE ════════════════════ -->
+<section class="slide center" id="s6">
+    <h2>How to Stay <span class="gold glow-gold">Valuable</span></h2>
+    <p class="sub">Click each card to unlock the secret inside 🔓</p>
+    <div class="grid-3 mt3 w100 mx-auto" style="max-width:860px">
+        <div class="card skill-card" onclick="toggleSkill(this)">
+            <div style="font-size:2rem;margin-bottom:8px">🧩</div>
+            <h3>Problem Solving</h3>
+            <p class="hint">👆 Click me</p>
+            <p class="detail">Break complex problems into small clear steps. This is the #1 skill that separates seniors from everyone else — and AI can't do it for you.</p>
+        </div>
+        <div class="card skill-card" onclick="toggleSkill(this)">
+            <div style="font-size:2rem;margin-bottom:8px">🏗️</div>
+            <h3>Architecture</h3>
+            <p class="hint">👆 Click me</p>
+            <p class="detail">Know when to use what. Simple problems need simple solutions. Don't let AI turn your todo list into a NASA mission.</p>
+        </div>
+        <div class="card skill-card" onclick="toggleSkill(this)">
+            <div style="font-size:2rem;margin-bottom:8px">✨</div>
+            <h3>Clean Code</h3>
+            <p class="hint">👆 Click me</p>
+            <p class="detail">AI writes spaghetti. You clean it. Your teammates will thank you. Or at least stop sending you passive-aggressive Slack messages.</p>
+        </div>
+        <div class="card skill-card" onclick="toggleSkill(this)">
+            <div style="font-size:2rem;margin-bottom:8px">⚖️</div>
+            <h3>Decision Making</h3>
+            <p class="hint">👆 Click me</p>
+            <p class="detail">Knowing when to use AI and when to think yourself is a skill nobody can automate. That judgment is genuinely priceless right now.</p>
+        </div>
+        <div class="card skill-card" onclick="toggleSkill(this)">
+            <div style="font-size:2rem;margin-bottom:8px">🔍</div>
+            <h3>Code Review</h3>
+            <p class="hint">👆 Click me</p>
+            <p class="detail">When everyone uses AI to write code, the person who catches the mistakes is the real hero. Be that hero. Get that respect.</p>
+        </div>
+        <div class="card skill-card c-gold" onclick="toggleSkill(this)">
+            <div style="font-size:2rem;margin-bottom:8px">🤖</div>
+            <h3 class="gold">Using AI Smartly</h3>
+            <p class="hint">👆 Click me</p>
+            <p class="detail">Delegate the boring, repetitive stuff to AI. Use your brain for interesting problems. Work smarter, leave earlier, feel better.</p>
+        </div>
+    </div>
+</section>
 
-                    gsap.to(item, { opacity: 1, y: 0, duration: 0.6, delay: delayMod, ease: 'back.out(1.7)' });
-                });
-            }
+<!-- ════════════════════ SLIDE 7 — CLEAN CODE ════════════════════ -->
+<section class="slide" id="s7">
+    <div class="split">
+        <div>
+            <h2>Clean Code is <span class="cyan">More Critical Now</span></h2>
+            <p class="sub mt2">AI writes code that <em>"works"</em>. Your job is to make it <em>readable and maintainable</em>.</p>
+            <ul class="list mt2">
+                <li>🧹 Clean up AI-generated mess before it ships.</li>
+                <li>👁️ Your team reads this code for years.</li>
+                <li>🏆 Clean code = fewer bugs = happier team.</li>
+            </ul>
+            <div class="hl mt2">
+                <strong>The person who makes AI code clean and safe is irreplaceable.</strong>
+            </div>
+        </div>
+        <div>
+            <div class="code-win card" style="padding:0;margin-bottom:12px">
+                <div class="code-bar">
+                    <span class="dot-mac r"></span><span class="dot-mac y"></span><span class="dot-mac g"></span>
+                    <span class="code-name">🤖 AI_Masterpiece.js</span>
+                </div>
+                <pre><code><span class="cm">// It works! (Don't ask questions) 😵‍💫</span>
+function d(x){return x.map(i=>fetch('/a',
+{body:JSON.stringify({v:i*2})}).then(r=>
+r.json()).catch(e=>null))}</code></pre>
+            </div>
+            <div class="code-win card" style="padding:0">
+                <div class="code-bar">
+                    <span class="dot-mac r"></span><span class="dot-mac y"></span><span class="dot-mac g"></span>
+                    <span class="code-name">✨ Human_Clean_Code.js</span>
+                </div>
+                <pre><code><span class="cm">// Beautiful. Readable. Chef's kiss 😍</span>
+async function saveDoubledPoints(points) {
+  const doubled = points.map(p => p * 2);
+  return await api.savePoints(doubled);
+}</code></pre>
+            </div>
+        </div>
+    </div>
+</section>
 
-            function updateUI() {
-                const progressPercent = ((currentSlide) / (slides.length - 1)) * 100;
-                progressBar.style.width = `${progressPercent}%`;
-                slideCounter.textContent = `${currentSlide + 1} / ${slides.length}`;
-                
-                prevBtn.style.opacity = currentSlide === 0 ? '0.3' : '1';
-                prevBtn.style.pointerEvents = currentSlide === 0 ? 'none' : 'auto';
-                
-                nextBtn.style.opacity = currentSlide === slides.length - 1 ? '0.3' : '1';
-                nextBtn.style.pointerEvents = currentSlide === slides.length - 1 ? 'none' : 'auto';
-            }
+<!-- ════════════════════ SLIDE 8 — CODE REVIEW ════════════════════ -->
+<section class="slide center" id="s8">
+    <h2>Code Review: <span class="red">Never Trust AI Blindly!</span></h2>
+    <p class="sub">You are the last line of defense. Don't fall asleep on the job. 💂</p>
+    <div class="mt3" style="display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;align-items:flex-start">
+        <div class="card c-red text-center" style="max-width:340px">
+            <h3 class="mb1">When you copy-paste AI code without reading it...</h3>
+            <img src="https://media.giphy.com/media/jUwpNzg9IcyrK/giphy.gif"
+                 alt="Homer disappears into bush" class="gif gif-sm" style="margin:12px auto"
+                 onerror="this.style.display='none'">
+            <h3 class="red mt1">= Technical Debt 💸</h3>
+        </div>
+        <div style="max-width:360px;text-align:left">
+            <div class="card c-green mb2">
+                <h4 class="green mb1">✅ Always ask yourself:</h4>
+                <ul class="list" style="font-size:0.92rem">
+                    <li>❓ Do I understand what this code does?</li>
+                    <li>❓ Is there a simpler way to do this?</li>
+                    <li>❓ Could this blow up in production?</li>
+                    <li>❓ Is there a security or privacy risk?</li>
+                </ul>
+            </div>
+            <div class="hl red">
+                <strong>The rule:</strong> If you can't explain it to your teammate, don't merge it. Ever.
+            </div>
+        </div>
+    </div>
+</section>
 
-            function next() { if (currentSlide < slides.length - 1) goToSlide(currentSlide + 1, 'next'); }
-            function prev() { if (currentSlide > 0) goToSlide(currentSlide - 1, 'prev'); }
+<!-- ════════════════════ SLIDE 9 — ENGINEER A vs B ════════════════════ -->
+<section class="slide center" id="s9">
+    <h2>AI Won't Replace You.<br><span class="gold glow-gold">A Person Using AI Will. 👀</span></h2>
+    <p class="sub">Click each engineer to see what their day actually looks like 👇</p>
+    <div class="grid-2 mt3 w100 mx-auto" style="max-width:760px">
+        <div class="card eng-card" onclick="flipEng(this)" style="text-align:center">
+            <div style="font-size:2.5rem;margin-bottom:8px">😰</div>
+            <h3>Engineer A</h3>
+            <div class="reveal-hint">👆 Click to reveal</div>
+            <div class="hidden-info mt2">
+                <ul class="list" style="text-align:left">
+                    <li style="color:var(--red)">❌ Types everything manually</li>
+                    <li style="color:var(--red)">❌ Works overtime every day</li>
+                    <li style="color:var(--red)">❌ Refuses to touch AI tools</li>
+                    <li style="color:var(--red)">❌ Burned out and stressed 😭</li>
+                </ul>
+            </div>
+        </div>
+        <div class="card eng-card c-gold" onclick="flipEng(this)" style="text-align:center">
+            <div style="font-size:2.5rem;margin-bottom:8px">🚀</div>
+            <h3 class="gold">Engineer B</h3>
+            <div class="reveal-hint">👆 Click to reveal</div>
+            <div class="hidden-info mt2">
+                <ul class="list" style="text-align:left">
+                    <li style="color:var(--green)">✅ AI handles the boring parts</li>
+                    <li style="color:var(--green)">✅ Focuses on architecture</li>
+                    <li style="color:var(--green)">✅ Reviews code carefully</li>
+                    <li style="color:var(--green)">✅ Goes home on time 🏡</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
 
-            nextBtn.addEventListener('click', next);
-            prevBtn.addEventListener('click', prev);
+<!-- ════════════════════ SLIDE 10 — SMART WORKFLOW ════════════════════ -->
+<section class="slide" id="s10">
+    <div class="text-center mb3">
+        <h2>The <span class="cyan">Smart 4-Step</span> Workflow</h2>
+        <p class="sub">This is what separates AI-powered engineers from AI-victims</p>
+    </div>
+    <div style="display:flex;justify-content:center;gap:1.2rem;flex-wrap:wrap">
+        <div class="card c-cyan" style="width:190px;text-align:center">
+            <div style="font-size:2.4rem;margin-bottom:10px">💬</div>
+            <h3 class="cyan">1. Ask Clearly</h3>
+            <p class="muted mt1" style="font-size:0.88rem">Garbage in, garbage out. Be specific and detailed!</p>
+        </div>
+        <div class="card c-purple" style="width:190px;text-align:center">
+            <div style="font-size:2.4rem;margin-bottom:10px">🤓</div>
+            <h3 class="purple">2. Read & Understand</h3>
+            <p class="muted mt1" style="font-size:0.88rem">Don't skip this. Not even once.</p>
+        </div>
+        <div class="card c-gold" style="width:190px;text-align:center">
+            <div style="font-size:2.4rem;margin-bottom:10px">🐛</div>
+            <h3 class="gold">3. Test It</h3>
+            <p class="muted mt1" style="font-size:0.88rem">"Works on my machine" is NOT testing. Sorry.</p>
+        </div>
+        <div class="card c-green" style="width:190px;text-align:center">
+            <div style="font-size:2.4rem;margin-bottom:10px">🧹</div>
+            <h3 class="green">4. Clean It Up</h3>
+            <p class="muted mt1" style="font-size:0.88rem">Polish it. Rename it. Then push it. Not before.</p>
+        </div>
+    </div>
+    <div class="text-center mt3">
+        <img src="https://media.giphy.com/media/d3mlE7uhX8KFgEmY/giphy.gif"
+             alt="Confident pointing" class="gif gif-sm gif-center"
+             onerror="this.style.display='none'">
+    </div>
+</section>
 
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'ArrowRight' || e.key === 'Space' || e.key === ' ') { e.preventDefault(); next(); } 
-                else if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); } 
-                else if (e.key === 'Escape') { if(currentSlide !== 0) goToSlide(0, 'prev'); }
-            });
+<!-- ════════════════════ SLIDE 11 — AI FOR THE TEAM ════════════════════ -->
+<section class="slide" id="s11">
+    <div class="text-center mb3">
+        <h2>AI is for the <span class="purple">Whole Team</span></h2>
+        <p class="sub">Not just engineers. Everyone wins. Here's how:</p>
+    </div>
+    <div class="grid-3">
+        <div class="card text-center">
+            <div style="font-size:2.4rem;margin-bottom:10px">🧪</div>
+            <h3>QA Testers</h3>
+            <p class="muted mt1" style="font-size:0.92rem">Generate test cases in seconds. Find edge cases you'd never think of. Automate regression at superhuman speed.</p>
+        </div>
+        <div class="card text-center">
+            <div style="font-size:2.4rem;margin-bottom:10px">📋</div>
+            <h3>Project Managers</h3>
+            <p class="muted mt1" style="font-size:0.92rem">Turn 2-hour meetings into 2-minute summaries. Write clearer tickets. Get status reports automatically.</p>
+        </div>
+        <div class="card text-center">
+            <div style="font-size:2.4rem;margin-bottom:10px">⚙️</div>
+            <h3>Scrum Masters</h3>
+            <p class="muted mt1" style="font-size:0.92rem">Write better sprint stories. Spot blockers early. Help the whole team communicate with more clarity.</p>
+        </div>
+    </div>
+    <div class="text-center mt3">
+        <img src="https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif"
+             alt="Monkey party" class="gif gif-sm gif-center"
+             onerror="this.style.display='none'">
+        <p class="muted mt1 italic">The whole team when they figure out AI 🎉</p>
+    </div>
+</section>
 
-            // Touch Swipe
-            let touchStartX = 0;
-            let touchEndX = 0;
-            document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, {passive: true});
-            document.addEventListener('touchend', e => {
-                touchEndX = e.changedTouches[0].screenX;
-                if (touchEndX < touchStartX - 50) next();
-                if (touchEndX > touchStartX + 50) prev();
-            }, {passive: true});
+<!-- ════════════════════ SLIDE 12 — YOUR VALUE UP ════════════════════ -->
+<section class="slide center" id="s12">
+    <h2>Your Value Goes <span class="green glow-cyan">UP 📈</span></h2>
+    <p class="sub">When AI does the boring, you focus on what actually matters.</p>
+    <div class="mt3 w100 mx-auto" style="display:flex;flex-direction:column;gap:10px;max-width:580px">
+        <div class="card c-green" style="padding:1rem 1.5rem;display:flex;align-items:center;gap:14px">
+            <span style="font-size:1.6rem">🏆</span>
+            <div>
+                <strong>Architecture & Big Decisions</strong>
+                <span class="green" style="font-size:0.82rem;margin-left:8px">(You own this)</span>
+            </div>
+        </div>
+        <div class="card c-cyan" style="padding:1rem 1.5rem;display:flex;align-items:center;gap:14px">
+            <span style="font-size:1.6rem">🔍</span>
+            <div>
+                <strong>Code Review & Quality Control</strong>
+                <span class="cyan" style="font-size:0.82rem;margin-left:8px">(You manage this)</span>
+            </div>
+        </div>
+        <div class="card c-purple" style="padding:1rem 1.5rem;display:flex;align-items:center;gap:14px">
+            <span style="font-size:1.6rem">🧠</span>
+            <div>
+                <strong>Problem Solving & Smart Judgment</strong>
+                <span class="purple" style="font-size:0.82rem;margin-left:8px">(You think this)</span>
+            </div>
+        </div>
+        <div class="card" style="padding:1rem 1.5rem;display:flex;align-items:center;gap:14px;opacity:0.55">
+            <span style="font-size:1.6rem">🤖</span>
+            <div>
+                <strong class="muted">Writing boring boilerplate</strong>
+                <span class="muted" style="font-size:0.82rem;margin-left:8px">(AI does this)</span>
+            </div>
+        </div>
+    </div>
+</section>
 
-            init();
+<!-- ════════════════════ SLIDE 13 — CODE REVIEW SUPERPOWER ════════════════════ -->
+<section class="slide" id="s13">
+    <div class="split">
+        <div>
+            <h2>Code Review is Your <span class="red">Superpower</span> 🦸</h2>
+            <p class="sub mt2">When everyone can write 1,000 lines in minutes, the person who can <em>review and validate</em> that code becomes the most valuable engineer in the room.</p>
+            <div class="hl red mt3">
+                <h4 class="red mb1">⚠️ New PR Rules in the AI Era:</h4>
+                <ul class="list" style="font-size:0.92rem">
+                    <li>Spend more time <em>reading</em> than writing.</li>
+                    <li>Hunt for logic mistakes, not just syntax errors.</li>
+                    <li>Catch AI importing a 2MB library just to format a date 🕵️</li>
+                </ul>
+            </div>
+        </div>
+        <div class="text-center">
+            <img src="https://media.giphy.com/media/3o7btQ8jDTPGDpgc6I/giphy.gif"
+                 alt="Looking closely" class="gif gif-lg" style="border-color:var(--red)"
+                 onerror="this.style.display='none'">
+            <p class="muted mt2 italic">Me reviewing an AI-written PR at 2am 🔎</p>
+        </div>
+    </div>
+</section>
+
+<!-- ════════════════════ SLIDE 14 — BIG TECH ════════════════════ -->
+<section class="slide" id="s14">
+    <div class="text-center mb3">
+        <h2>What <span class="cyan">Big Tech</span> Actually Wants</h2>
+        <p class="sub">Google, Amazon, Microsoft, Careem — here's what they're really interviewing for:</p>
+    </div>
+    <div class="split">
+        <div>
+            <div class="card c-red mb2">
+                <h4 class="red mb2">❌ They DON'T care about:</h4>
+                <ul class="list" style="font-size:0.95rem">
+                    <li>Memorizing perfect syntax</li>
+                    <li>Knowing every framework API</li>
+                    <li>How fast you type</li>
+                </ul>
+            </div>
+            <div class="card c-green">
+                <h4 class="green mb2">✅ They DO care about:</h4>
+                <ul class="list" style="font-size:0.95rem">
+                    <li>System Design thinking</li>
+                    <li>Problem Solving approach</li>
+                    <li><strong>How you THINK! 🧠</strong></li>
+                </ul>
+            </div>
+        </div>
+        <div class="card c-gold text-center">
+            <img src="https://media.giphy.com/media/3o7btNa0RUYa5E7iiQ/giphy.gif"
+                 alt="Mind blown" class="gif gif-sm" style="max-height:160px;margin:0 auto 14px"
+                 onerror="this.src='https://media.giphy.com/media/nDSlfqf0gn5g4/giphy.gif'">
+            <p style="font-size:1.05rem">If they cared about <strong>how you think</strong> before AI existed...</p>
+            <h3 class="purple mt2">What do you think they want <span class="glow-purple">NOW?</span> 🤯</h3>
+        </div>
+    </div>
+</section>
+
+<!-- ════════════════════ SLIDE 15 — ACTION PLAN ════════════════════ -->
+<section class="slide center" id="s15">
+    <span class="deco" style="top:12%;left:6%;animation-delay:0s">🚀</span>
+    <span class="deco" style="bottom:22%;right:5%;animation-delay:1.5s">💪</span>
+
+    <h2>Your <span class="green">Action Plan</span> 🚀</h2>
+    <p class="sub">Start doing these tomorrow. Like, <em>actually</em> tomorrow.</p>
+    <div class="grid-2 mt3 w100 mx-auto" style="max-width:800px">
+        <div class="card c-cyan">
+            <h3 class="cyan mb1">💬 1. Join #problem-hackers</h3>
+            <p style="font-size:0.92rem;color:var(--muted)">This Slack channel is for real problem-solving sessions. Share hard challenges. Hack them together as a team.</p>
+        </div>
+        <div class="card c-purple">
+            <h3 class="purple mb1">📚 2. Learn System Design</h3>
+            <p style="font-size:0.92rem;color:var(--muted)">This is the deep knowledge AI cannot fake for you. Read one resource per week. Start today. Seriously.</p>
+        </div>
+        <div class="card c-green">
+            <h3 class="green mb1">🔍 3. Review More PRs</h3>
+            <p style="font-size:0.92rem;color:var(--muted)">Review other people's code. Ask questions. Never be shy — this is the fastest path to growth in the AI era.</p>
+        </div>
+        <div class="card c-gold">
+            <h3 class="gold mb1">🤖 4. Delegate to AI</h3>
+            <p style="font-size:0.92rem;color:var(--muted)">Stop typing boilerplate yourself. Let AI do it. Save your brain power for what actually makes you irreplaceable.</p>
+        </div>
+    </div>
+    <button class="commit-btn" id="commitBtn" onclick="commit()">
+        <span id="commitText">🚀 I Commit to This Plan!</span>
+    </button>
+</section>
+
+<!-- ════════════════════ SLIDE 16 — THE QUOTE ════════════════════ -->
+<section class="slide center" id="s16">
+    <div style="font-size:3rem;color:var(--gold)">❝</div>
+    <h1 class="glow-cyan mt1 mb1" style="max-width:840px;line-height:1.2">
+        Don't compete with AI at <span class="red">typing</span>.<br>
+        Compete at <span class="cyan">thinking</span>.
+    </h1>
+    <div style="font-size:3rem;color:var(--gold)">❞</div>
+    <p class="sub mt3">AI writes code. <strong class="white">Engineers build trust.</strong></p>
+    <img src="https://media.giphy.com/media/3o7btQ8jDTPGDpgc6I/giphy.gif"
+         alt="Big brain" class="gif gif-sm gif-center mt3"
+         onerror="this.style.display='none'">
+</section>
+
+<!-- ════════════════════ SLIDE 17 — THANK YOU ════════════════════ -->
+<section class="slide center" id="s17">
+    <span class="deco" style="top:12%;left:8%;animation-delay:0s">🎉</span>
+    <span class="deco" style="top:16%;right:6%;animation-delay:1s">🚀</span>
+    <span class="deco" style="bottom:22%;left:5%;animation-delay:2s">🎊</span>
+    <span class="deco" style="bottom:18%;right:8%;animation-delay:0.5s">⭐</span>
+
+    <h1 class="purple glow-purple">Thank You! 🎉</h1>
+    <h2 class="sub mt1">Questions? Reactions? Memes? All welcome 👇</h2>
+
+    <img src="https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif"
+         alt="Monkey celebration" class="gif gif-md gif-center gif-glow mt3"
+         onerror="this.src='https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif'">
+
+    <div class="poll-group mt3">
+        <button class="poll-btn cyan"   onclick="react('🤯 Mind officially blown!')">🤯 Mind blown!</button>
+        <button class="poll-btn green"  onclick="react('😎 Got it. Time to apply this!')">😎 Got it!</button>
+        <button class="poll-btn purple" onclick="react('🤔 Still a bit scared... but less so!')">🤔 Still scared...</button>
+        <button class="poll-btn gold"   onclick="react('🚀 LET\'S GOOOO!')">🚀 Let's go!</button>
+    </div>
+    <div id="reaction-out" class="poll-answer mt2" style="font-size:1.2rem"></div>
+
+    <p class="muted mt3" style="font-size:0.85rem">Press <kbd>Esc</kbd> to restart from the beginning</p>
+</section>
+
+</div><!-- /#slides -->
+
+<!-- Navigation -->
+<div class="nav">
+    <button class="nav-btn" id="btnPrev" onclick="go(cur-1)">◀</button>
+    <span class="slide-ctr" id="ctr">1 / 18</span>
+    <button class="nav-btn" id="btnNext" onclick="go(cur+1)">▶</button>
+</div>
+
+<div class="dots" id="dots"></div>
+
+<div class="kb">
+    <kbd>←</kbd> <kbd>→</kbd> <kbd>Space</kbd>
+</div>
+
+<script>
+/* ── State ── */
+const slides = [...document.querySelectorAll('.slide')];
+const TOTAL  = slides.length;
+let   cur    = 0;
+
+/* ── Build dots ── */
+const dotsEl = document.getElementById('dots');
+slides.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.onclick   = () => go(i);
+    dotsEl.appendChild(d);
+});
+
+/* ── Navigate ── */
+function go(to) {
+    if (to < 0 || to >= TOTAL || to === cur) return;
+    slides[cur].classList.remove('active');
+    cur = to;
+    slides[cur].classList.add('active');
+    updateUI();
+}
+
+function updateUI() {
+    const pct = TOTAL > 1 ? (cur / (TOTAL - 1)) * 100 : 100;
+    document.getElementById('prog').style.width = pct + '%';
+    document.getElementById('ctr').textContent  = `${cur + 1} / ${TOTAL}`;
+    document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === cur));
+    document.getElementById('btnPrev').disabled = cur === 0;
+    document.getElementById('btnNext').disabled = cur === TOTAL - 1;
+}
+
+/* ── Keyboard ── */
+document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(cur + 1); }
+    if (e.key === 'ArrowLeft')                     go(cur - 1);
+    if (e.key === 'Escape')                        go(0);
+});
+
+/* ── Poll ── */
+function vote(id, msg) {
+    const el = document.getElementById(id + '-out');
+    if (el) { el.textContent = msg; el.style.animation = 'none'; el.offsetHeight; el.style.animation = ''; }
+}
+
+/* ── Quiz ── */
+function quiz(btn, correct) {
+    const opts = document.querySelectorAll('.quiz-opt');
+    opts.forEach(o => { o.disabled = true; });
+    const fb = document.getElementById('quiz-fb');
+    if (correct) {
+        btn.classList.add('correct');
+        fb.className = 'quiz-feedback show good';
+        fb.textContent = '🎉 CORRECT! That\'s the senior engineer mindset. Simplicity always wins!';
+    } else {
+        btn.classList.add('wrong');
+        opts[1].classList.add('correct');
+        fb.className = 'quiz-feedback show bad';
+        fb.textContent = '😅 Nice try! The answer is B. Always question AI over-engineering!';
+    }
+}
+
+/* ── Skill cards ── */
+function toggleSkill(el) {
+    el.classList.toggle('open');
+}
+
+/* ── Engineer flip ── */
+function flipEng(el) {
+    el.classList.toggle('flipped');
+}
+
+/* ── Reaction ── */
+function react(label) {
+    const el = document.getElementById('reaction-out');
+    el.textContent = label;
+}
+
+/* ── Commitment + Confetti ── */
+function commit() {
+    const btn  = document.getElementById('commitBtn');
+    const text = document.getElementById('commitText');
+    btn.classList.add('done');
+    text.textContent = '✅ Committed! Now go and do it! 🎊';
+    btn.disabled = true;
+    launchConfetti();
+}
+
+function launchConfetti() {
+    const cv   = document.getElementById('confetti');
+    const ctx  = cv.getContext('2d');
+    cv.width   = window.innerWidth;
+    cv.height  = window.innerHeight;
+    cv.style.opacity = '1';
+
+    const COLORS = ['#00f0ff','#b026ff','#00ff9d','#ffd700','#ff3366','#ffffff','#ff9d00'];
+    const pieces = [];
+
+    for (let i = 0; i < 180; i++) {
+        pieces.push({
+            x:     Math.random() * cv.width,
+            y:    -10 - Math.random() * 220,
+            w:     Math.random() * 12 + 5,
+            h:     Math.random() * 6 + 3,
+            col:   COLORS[Math.floor(Math.random() * COLORS.length)],
+            vx:   (Math.random() - 0.5) * 6,
+            vy:    Math.random() * 4 + 2,
+            rot:   Math.random() * 360,
+            vrot: (Math.random() - 0.5) * 9,
+            op:    1
         });
-    </script>
+    }
+
+    let frame = 0;
+    (function draw() {
+        ctx.clearRect(0, 0, cv.width, cv.height);
+        let alive = false;
+        pieces.forEach(p => {
+            p.x  += p.vx;
+            p.y  += p.vy;
+            p.vy += 0.12; // gravity
+            p.rot += p.vrot;
+            if (p.y > cv.height - 60) p.op -= 0.025;
+            if (p.op > 0) alive = true;
+            ctx.save();
+            ctx.globalAlpha = Math.max(p.op, 0);
+            ctx.fillStyle   = p.col;
+            ctx.translate(p.x, p.y);
+            ctx.rotate(p.rot * Math.PI / 180);
+            ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+            ctx.restore();
+        });
+        frame++;
+        if (frame < 220 || alive) {
+            requestAnimationFrame(draw);
+        } else {
+            cv.style.opacity = '0';
+            ctx.clearRect(0, 0, cv.width, cv.height);
+        }
+    })();
+}
+
+/* ── Init ── */
+updateUI();
+</script>
 </body>
 </html>
